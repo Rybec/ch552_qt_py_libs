@@ -3,6 +3,13 @@ A set of small, high performance libraries for Adafruit's CH552 QT Py.
 
 This is a set of fairly streamlined libraries designed specifically for the CH552 QT Py.  It should work with any CH552, but certain things are hardcoded for Adafruit's board layout.
 
+## How to use
+
+You will need SSDC and Gnu Make installed.  You'll probably also want a means of flashing the compiled executable to your device.  You can find instructions for setting this up in Windows (and some basic guidance for Linux setup) in chapter 0 of [this tutorial series](https://techniumadeptus.substack.com/p/ch552-assembly-table-of-contents).
+
+From there, you'll clone this repository, and then you'll setup your project with a Makefile that triggers the Makefile in `lib/` to build.  Once it's done building, you'll find `mcs15.lib` in the `lib/` folder, which you can include on the command line for compiling your main program.  Don't forget to set F_CPU to the CPU speed you are using, so that any libraries that need to know have access to that information.  For using the specific libraries included here, see the documentation for them below.
+
+
 ## Libraries included
 
 ### I2C
