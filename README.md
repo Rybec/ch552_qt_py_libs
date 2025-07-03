@@ -185,3 +185,26 @@ I can guarantee 100% that this won't work with other 8051 variants.  To achieve 
 It might be nice to have some vector drawing functions, maybe as a separate submodule.  Circles, lines, squares, and triangles can be drawn quite quickly, and it might even be possible to get some (dithered) interpolation or even some shader capabilities in there as well.  I'm not sure if the CH552 is fast enough to do all of that _and_ an application that uses it all at the same time though.  Basic 2D vector drawing is a very good idea though.  This is _not_ high priority though.
 
 I _am_ planning on converting more Megazeux fonts though.  Megazeux has some 6 games or so that are part of the series.  The fonts I've provided are the default character set and the character set from Caverns, the second game in the series.  I've started on Zeux, but converting 8x14 to 8x8 is rather a challenge.  Then we've got the ones after Caverns, which I've got the character sets for as well.  (Note that a) in the U.S. font faces cannot be copyrighted, and b) I'm not downscaline, I'm completely remaking these fonts from scratch, using the originals only as reference.  I'm releasing the fonts themselves into the public domain, so you can do whatever you want with them.)
+
+---
+
+### SSD1306_stdio
+
+This adds full console support using the SSD1306 library for rendering.  It allows the use of `printf()` to print directly to the display.  This also means that you can use `printf()` formatting commands and number to string conversion.  Note, however, that doing this will interfere with using `print()` to print to the serial console, so you have to choose!
+
+#### Usage
+
+`void SSD1306_set_font(SSD1306_CTiles *font)`  
+Sets the font used by `printf()`.
+
+Beyond this, there's nothing else you need to do.  This module overrides/provides `putchar()` to send text to the display.  This is automatic.  It also handles the cursor automatically, and it uses the same cursor as SSD1306.  This means you can use `SSD1306_locate()`, and now `printf()` will print starting at that location.  This also adds one more feature: If you write a character past the end of the display, it will scroll the display up 8 pixels to make room for the new text, just like a typical console.
+
+Note that currently this is included in the library by default, and SSDC will include it in the program automatically, because `putchar()` is used.  I'm going to add a `make` variable that can be set to disable this module, so you can avoid the extra code if you aren't using it, and so you can prevent it from clashing with code directing `printf()` to the serial console.  I'll replace this with instructions on using that variable once I've done this.
+
+#### Generic CH552 Use
+
+This should work anywhere the SSD1306 module works.  If you change the screen size, you'll have to make changes here as well.
+
+#### Future Work
+
+I actually want to completely decouple this from SSD1306, so it can be used alone when you don't want graphics but need console-like behavior.  The graphics code is kind of heavy, so including it all when you are only ever printing characters just doesn't make sense.  I will have to include some interoperability code to do that though, so that if you _do_ want both, they don't step on each other's toes.  This honestly shouldn't be that hard, but it's not a high priority right now.
