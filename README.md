@@ -7,6 +7,9 @@ This is a set of fairly streamlined libraries designed specifically for the CH55
 
 ### I2C
 
+<details>
+<summary>Details</summary>
+
 This is a fairly complete, from scratch I2C driver, hardcoded to use the Stemma QT port on the CH552 QT Py.  The CH552 does not have hardware I2C, so this is a bitbanging driver.  This is mainly written in C, with delays written using inline assembly in macros.  I have not measured the timing, but at 16MHz, my math indicates it should run at around 333kbit/s.
 
 #### Usage
@@ -45,10 +48,14 @@ Also note that this is designed for the highest clock speed supported by the CH5
 #### Future Work
 
 This currently sends one byte per function call.  This almost certainly reduces the bit rate significantly below the estimated maximum.  It needs a function that can send an entire buffer of arbitrary length all at once, to eliminate unnecessary function call overhead when sending large amounts of data.  It might also be worth adding a buffered multi-byte read function at some point as well.
+</details>
 
 ---
 
 ### Delay
+
+<details>
+<summary>Details</summary>
 
 This is a pair of simple assembly delay functions, designed for extremely high precision delays.  These are tuned for 16MHz.  They will be proportionally shorter or longer if the clock speed is higher or lower respectively.  These are also size optimized.
 
@@ -71,11 +78,15 @@ This should work as-is for any CH552 set to run at 16MHz.  It may also run as-is
 #### Future Work
 
 This is _not_ a high priority, but a delay function with a resolution of 1 second might be a good idea.  That said, this is probably better done with the built in timer peripherals than with assembly level delays.
+</details>
 
 ---
 
 ### SSD1306
 
+<details>
+<summary>Details</summary>
+  
 This is a driver for the SSD1306 OLED driver chip.  This is designed specifically for [Adafruit's 128x32 I2C OLED Display](https://www.adafruit.com/product/4440), which uses this driver chip.  The CH552 has only 1KB of external RAM (and 256 bytes of internal RAM), which means that this is the biggest display that can be framebuffered on it, without using all of the external RAM and leaving too little free memory to do much that is useful.  This driver uses the top half (512 bytes) of XRAM for the framebuffer.  Significant portions of this are written in assembly, to maximize speed and to keep the code footprint small.  All rendering goes to the framebuffer, which can then be blitted to the display over I2C with a single function call.  The overall speed is easily fast enough for animations and even video games.  Support is provided for two kinds of sprites (one for speed, the other for flexibility), pixel by pixel drawing, printing grid aligned monospace text in 8x8 fonts, as well as for some special features of the SSD1306 driver chip.
 
 Note that this is dependent on the I2C library.
@@ -185,10 +196,14 @@ I can guarantee 100% that this won't work with other 8051 variants.  To achieve 
 It might be nice to have some vector drawing functions, maybe as a separate submodule.  Circles, lines, squares, and triangles can be drawn quite quickly, and it might even be possible to get some (dithered) interpolation or even some shader capabilities in there as well.  I'm not sure if the CH552 is fast enough to do all of that _and_ an application that uses it all at the same time though.  Basic 2D vector drawing is a very good idea though.  This is _not_ high priority though.
 
 I _am_ planning on converting more Megazeux fonts though.  Megazeux has some 6 games or so that are part of the series.  The fonts I've provided are the default character set and the character set from Caverns, the second game in the series.  I've started on Zeux, but converting 8x14 to 8x8 is rather a challenge.  Then we've got the ones after Caverns, which I've got the character sets for as well.  (Note that a) in the U.S. font faces cannot be copyrighted, and b) I'm not downscaline, I'm completely remaking these fonts from scratch, using the originals only as reference.  I'm releasing the fonts themselves into the public domain, so you can do whatever you want with them.)
+</details>
 
 ---
 
 ### SSD1306_stdio
+
+<details>
+<summary>Details</summary>
 
 This adds full console support using the SSD1306 library for rendering.  It allows the use of `printf()` to print directly to the display.  This also means that you can use `printf()` formatting commands and number to string conversion.  Note, however, that doing this will interfere with using `print()` to print to the serial console, so you have to choose!
 
@@ -208,9 +223,14 @@ This should work anywhere the SSD1306 module works.  If you change the screen si
 #### Future Work
 
 I actually want to completely decouple this from SSD1306, so it can be used alone when you don't want graphics but need console-like behavior.  The graphics code is kind of heavy, so including it all when you are only ever printing characters just doesn't make sense.  I will have to include some interoperability code to do that though, so that if you _do_ want both, they don't step on each other's toes.  This honestly shouldn't be that hard, but it's not a high priority right now.
+</details>
 
 ---
 
 ### Adafruit Gamepad Stemma QT
 
+<details>
+<summary>Details</summary>
+
 This is not complete.  In fact, it's not quite started either.  The next driver I'm working on is for [Adafruit's Stemma QT Gamepad](https://www.adafruit.com/product/5743).  This uses Adafruit's Seesaw driver, so I'm going to have to at least partially implement a driver for that for the CH552.  The name of this section will probably change to something reflecting that, and it might end up being two drivers, the Seesaw driver, and then the gamepad driver that is dependent on the Seesaw driver.  I don't know yet.  I haven't actually started!
+</details>
