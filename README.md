@@ -19,6 +19,8 @@ From there, you'll clone this repository, and then you'll setup your project wit
 
 This is a fairly complete, from scratch I2C driver, hardcoded to use the Stemma QT port on the CH552 QT Py.  The CH552 does not have hardware I2C, so this is a bitbanging driver.  This is mainly written in C, with delays written using inline assembly in macros.  I have not measured the timing, but at 16MHz, my math indicates it should run at around 333kbit/s.
 
+You can find the tutorial where these functions are developed here (paywalled): [CH552 Drivers: Software I2C Driver](https://techniumadeptus.substack.com/p/ch552-drivers-software-i2c-driver).
+
 #### Usage
 
 `void I2C_init(void)`  
@@ -66,6 +68,8 @@ This currently sends one byte per function call.  This almost certainly reduces 
 
 This is a pair of simple assembly delay functions, designed for extremely high precision delays.  These are tuned for 16MHz.  They will be proportionally shorter or longer if the clock speed is higher or lower respectively.  These are also size optimized.
 
+You can find the tutorial where these functions are developed here: [CH552 Assembly: 2 - Again in Assembly](https://techniumadeptus.substack.com/p/ch552-assembly-2-again-in-assembly).
+
 It should be noted that if you use interrupts, and one of these delays is interrupted, it won't know that it was interrupted, and the time spent in the interupt service routine will be added to the delay.  If you really need ultra high precision timing, and you are using interrupts, you should disable interrupts before starting the time sensitive code and reenable them after.  These functions will not do that for you!
 
 One final note: These delay 1 to 256 units.  If you need a delay between 256 and the next unit up, you'll have to use multiple delay calls.  Function call overhead may introduce some inaccuracy, though it will never be enough to matter for the millisecond variant.  For the microsecond variant, 16 cycles is one microsecond, and the overhead of four function calls _will_ add up to 16 or more cycles.  Depending on pre-call register juggling, four calls could easily take several microseconds.  If this is a problem for your particular use case, you might want to consider writing your timing dependent code in assembly, so that you can control this and precisely calculate function call overhead to subtract it from the delays.  (Or you could just do trial and error...  _I_ wouldn't recommend that though.)
@@ -95,6 +99,12 @@ This is _not_ a high priority, but a delay function with a resolution of 1 secon
 <summary>Details</summary>
   
 This is a driver for the SSD1306 OLED driver chip.  This is designed specifically for [Adafruit's 128x32 I2C OLED Display](https://www.adafruit.com/product/4440), which uses this driver chip.  The CH552 has only 1KB of external RAM (and 256 bytes of internal RAM), which means that this is the biggest display that can be framebuffered on it, without using all of the external RAM and leaving too little free memory to do much that is useful.  This driver uses the top half (512 bytes) of XRAM for the framebuffer.  Significant portions of this are written in assembly, to maximize speed and to keep the code footprint small.  All rendering goes to the framebuffer, which can then be blitted to the display over I2C with a single function call.  The overall speed is easily fast enough for animations and even video games.  Support is provided for two kinds of sprites (one for speed, the other for flexibility), pixel by pixel drawing, printing grid aligned monospace text in 8x8 fonts, as well as for some special features of the SSD1306 driver chip.
+
+You can find the tutorial where these functions are developed here (paywalled):
+- [CH552 Drivers: SSD1306 Display Driver - Part 1](https://techniumadeptus.substack.com/p/ch552-drivers-ssd1306-display-driver)
+- [CH552 Drivers: SSD1306 Display Driver - Part 2](https://techniumadeptus.substack.com/p/ch552-drivers-ssd1306-display-driver-b06)
+- [CH552 Drivers: SSD1306 Display Driver - Part 3](https://techniumadeptus.substack.com/p/ch552-drivers-ssd1306-display-driver-0b8)
+- [CH552 Drivers: SSD1306 Display Driver - Part 4](https://techniumadeptus.substack.com/p/ch552-drivers-ssd1306-display-driver-dfe)
 
 Note that this is dependent on the I2C library.
 
@@ -213,6 +223,8 @@ I _am_ planning on converting more Megazeux fonts though.  Megazeux has some 6 g
 <summary>Details</summary>
 
 This adds full console support using the SSD1306 library for rendering.  It allows the use of `printf()` to print directly to the display.  This also means that you can use `printf()` formatting commands and number to string conversion.  Note, however, that doing this will interfere with using `print()` to print to the serial console, so you have to choose!
+
+You can find the tutorial where these functions are developed here (paywalled): [CH552 Drivers: SSD1306 Display Driver - Part 3](https://techniumadeptus.substack.com/p/ch552-drivers-ssd1306-display-driver-0b8).
 
 #### Usage
 
