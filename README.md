@@ -244,7 +244,9 @@ This should work anywhere the SSD1306 module works.  If you change the screen si
 I actually want to completely decouple this from SSD1306, so it can be used alone when you don't want graphics but need console-like behavior.  The graphics code is kind of heavy, so including it all when you are only ever printing characters just doesn't make sense.  I will have to include some interoperability code to do that though, so that if you _do_ want both, they don't step on each other's toes.  This honestly shouldn't be that hard, but it's not a high priority right now.
 </details>
 
----
+
+
+## Incomplete/Planned
 
 ### Adafruit Gamepad Stemma QT
 
@@ -252,4 +254,15 @@ I actually want to completely decouple this from SSD1306, so it can be used alon
 <summary>Details</summary>
 
 This is not complete.  In fact, it's not quite started either.  The next driver I'm working on is for [Adafruit's Stemma QT Gamepad](https://www.adafruit.com/product/5743).  This uses Adafruit's Seesaw driver, so I'm going to have to at least partially implement a driver for that for the CH552.  The name of this section will probably change to something reflecting that, and it might end up being two drivers, the Seesaw driver, and then the gamepad driver that is dependent on the Seesaw driver.  I don't know yet.  I haven't actually started!
+</details>
+
+---
+
+### WS2812 (NeoPixel Driver)
+
+<details>
+<summary>Details</summary>
+
+ch55xduino has a generic NeoPixel driver that uses a somewhat messy (but likely necessary) mechanic to support NeoPixels on any pin.  I've made a modified version specifically for the CH552 QT Py, however ch55xduino is under an LGPL license, which is not relicensable under the MIT license (which this library is under), so I can't just add it to this library.  It's likely I'll have to write a new WS2812 driver from scratch to include in this project.  NeoPixels are time sensitive, which means this must be written in assembly.  The best information on NeoPixel timing that is available can be found [here](https://wp.josh.com/2014/05/13/ws2812-neopixels-are-not-so-finicky-once-you-get-to-know-them/).  This shouldn't be too difficult.
+
 </details>
