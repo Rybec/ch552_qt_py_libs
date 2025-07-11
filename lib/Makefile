@@ -1,7 +1,7 @@
-C_FLAGS=
+CFLAGS=
 INCLUDES=../include
 
-rel_files=delay.rel I2C.rel SSD1306/SSD1306.rel SSD1306/SSD1306_stdio.rel
+rel_files=delay.rel I2C.rel SSD1306/SSD1306.rel SSD1306/SSD1306_stdio.rel clock.rel
 
 
 
@@ -15,7 +15,11 @@ delay.rel: delay.asm
 	sdas8051.exe -plosffwv delay.rel delay.asm
 
 I2C.rel: I2C.c
-	sdcc I2C.c -c -I $(INCLUDES) $(C_FLAGS)
+	sdcc I2C.c -c -I $(INCLUDES) $(CFLAGS)
+
+clock.rel: clock.c
+	sdcc clock.c -c -I $(INCLUDES) $(CFLAGS)
+
 
 SSD1306/SSD1306.rel:
 	+$(MAKE) -C SSD1306 SSD1306.rel
