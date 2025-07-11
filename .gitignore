@@ -1,0 +1,9 @@
+*.lib
+*.rel
+*.lst
+*.sym
+*.swp
+*~
+lib/I2C.asm
+lib/SSD1306/SSD1306.asm
+lib/SSD1306/SSD1306_stdio.asm
