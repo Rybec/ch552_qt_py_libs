@@ -18,14 +18,15 @@ I2C.rel: I2C.c
 	sdcc I2C.c -c -I $(INCLUDES) $(CFLAGS)
 
 clock.rel: clock.c
+	echo $(CFLAGS)
 	sdcc clock.c -c -I $(INCLUDES) $(CFLAGS)
 
 
 SSD1306/SSD1306.rel:
-	+$(MAKE) -C SSD1306 SSD1306.rel
+	+$(MAKE) -C SSD1306 SSD1306.rel CFLAGS="$(CFLAGS)"
 
 SSD1306/SSD1306_stdio.rel:
-	+$(MAKE) -C SSD1306 SSD1306_stdio.rel
+	+$(MAKE) -C SSD1306 SSD1306_stdio.rel CFLAGS="$(CFLAGS)"
 
 
 clean:
