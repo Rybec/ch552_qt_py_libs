@@ -50,7 +50,6 @@ void SSD1306_blit_xbytes_fb(__xdata uint8_t *src,
 				            __data uint8_t __at(0x01) y_page,
 						    __data uint8_t __at(0x02) len);
 
-void SSD1306_blit_char_fb(__code uint8_t *src);
 
 void SSD1306_blit_sprite_fb(SSD1306_CSprites *src,
 				          __data uint8_t __at(0x00) x,
@@ -59,8 +58,10 @@ void SSD1306_blit_sprite_fb(SSD1306_CSprites *src,
 
 void SSD1306_draw_pixel(uint8_t x, uint8_t y, uint8_t color);
 
+
 void SSD1306_cls(void);
 void SSD1306_locate(uint8_t col, uint8_t row);
+void SSD1306_blit_char_fb(__code uint8_t *src);
 void SSD1306_print(char *s, uint8_t len, SSD1306_CTiles *font);
 
 
